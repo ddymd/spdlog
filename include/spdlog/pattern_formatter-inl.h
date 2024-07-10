@@ -553,9 +553,13 @@ public:
         : flag_formatter(padinfo) {}
 
     void format(const details::log_msg &msg, const std::tm &, memory_buf_t &dest) override {
-        const auto field_size = ScopedPadder::count_digits(msg.thread_id);
-        ScopedPadder p(field_size, padinfo_, dest);
-        fmt_helper::append_int(msg.thread_id, dest);
+        // const auto field_size = ScopedPadder::count_digits(msg.thread_id);
+        // ScopedPadder p(field_size, padinfo_, dest);
+        // fmt_helper::append_int(msg.thread_id, dest);
+
+        const std::string &str_hex = fmt::format("0x{:08X}", msg.thread_id);
+        ScopedPadder p(str_hex.size(), padinfo_, dest);
+        fmt_helper::append_string_view(str_hex, dest);
     }
 };
 
